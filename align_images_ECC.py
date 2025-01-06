@@ -1,4 +1,4 @@
-#align_images_CEE
+#align_images_ECC
 
 import cv2
 import numpy as np
