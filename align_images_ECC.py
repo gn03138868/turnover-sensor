@@ -1,4 +1,6 @@
 #align_images_ECC
+#再次修正版本使輸出不亂跑
+#不切變與縮放，只有旋轉和平移避免讓原圖失真
 
 import cv2
 import numpy as np
@@ -6,92 +8,137 @@ import os
 
 def align_images_ecc(reference_image, target_image):
     """
-    使用 ECC 方法對齊影像。
-    :param reference_image: 參考影像 (灰階)
-    :param target_image: 目標影像 (灰階)
-    :return: 對齊後的目標影像
+    使用 ECC 方法對齊影像，確保輸出維持 A4 大小。
+    只允許平移和旋轉，避免切變和縮放。
+    :param reference_image: 參考影像 (A4 大小)
+    :param target_image: 目標影像 (A4 大小)
+    :return: 對齊後的目標影像 (A4 大小)
     """
-    # 將影像轉為灰階
+    # 確保輸入影像為 A4 大小
+    a4_width, a4_height = 4960, 7014  # A4 尺寸 (600 DPI)
+    
+    # 調整輸入影像至 A4 大小
+    reference_image = cv2.resize(reference_image, (a4_width, a4_height))
+    target_image = cv2.resize(target_image, (a4_width, a4_height))
+
+    # 轉換為灰階
     reference_gray = cv2.cvtColor(reference_image, cv2.COLOR_BGR2GRAY)
     target_gray = cv2.cvtColor(target_image, cv2.COLOR_BGR2GRAY)
-    
-    # 初始化變換矩陣 (3x3)
-    warp_matrix = np.eye(3, 3, dtype=np.float32)
+
+    # 初始化變換矩陣
+    warp_matrix = np.eye(2, 3, dtype=np.float32)  # 2x3 矩陣，適用於平移和旋轉
 
     # 設定停止條件
     criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 5000, 1e-10)
 
-    # 執行 ECC 影像註冊
-    cc, warp_matrix = cv2.findTransformECC(reference_gray, target_gray, warp_matrix, cv2.MOTION_HOMOGRAPHY, criteria)
-    
-    # 套用變換至目標影像
-    aligned_image = cv2.warpPerspective(target_image, warp_matrix, (reference_image.shape[1], reference_image.shape[0]), flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP)
+    try:
+        # 執行 ECC 影像註冊
+        cc, warp_matrix = cv2.findTransformECC(
+            reference_gray, target_gray, warp_matrix, cv2.MOTION_EUCLIDEAN, 
+            criteria, None, 5
+        )
+
+        # 套用變換並確保輸出為 A4 大小
+        aligned_image = cv2.warpAffine(
+            target_image, warp_matrix,
+            (a4_width, a4_height),
+            flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP,
+            borderMode=cv2.BORDER_CONSTANT,
+            borderValue=(0, 0, 0)  # 黑色填充
+        )
+    except cv2.error:
+        print("警告：對齊失敗，返回原始大小的目標影像")
+        aligned_image = target_image
+
     return aligned_image
 
-def crop_to_common_area(images):
+
+def ensure_a4_size(image):
     """
-    找到所有影像的共同有效區域並裁切。
-    :param images: 對齊後的影像列表
-    :return: 裁切後的影像列表
+    確保影像為A4大小，必要時進行填充或縮放。
+    :param image: 輸入影像
+    :return: A4大小的影像
     """
-    combined_mask = None
+    a4_width, a4_height = 4960, 7014  # A4 尺寸 (600 DPI)
+    
+    # 創建A4畫布
+    a4_canvas = np.full((a4_height, a4_width, 3), 255, dtype=np.uint8)
+    
+    if image is not None:
+        # 計算縮放比例，保持原始比例
+        h, w = image.shape[:2]
+        scale_w = a4_width / w
+        scale_h = a4_height / h
+        scale = min(scale_w, scale_h)
 
-    # 計算每張影像的有效區域 (非零像素)
-    for image in images:
-        mask = (image.sum(axis=2) > 0).astype(np.uint8)  # 假設非黑色區域為有效
-        if combined_mask is None:
-            combined_mask = mask
-        else:
-            combined_mask = cv2.bitwise_and(combined_mask, mask)
+        # 調整影像大小
+        new_width = int(w * scale)
+        new_height = int(h * scale)
+        resized_image = cv2.resize(image, (new_width, new_height))
 
-    if not combined_mask.any():
-        raise ValueError("未找到有效的重疊區域，請檢查對齊參數或原始影像質量。")
+        # 計算居中位置
+        y_offset = (a4_height - new_height) // 2
+        x_offset = (a4_width - new_width) // 2
 
-    # 找到有效區域的邊界
-    y_coords, x_coords = np.where(combined_mask)
-    x_min, x_max = x_coords.min(), x_coords.max()
-    y_min, y_max = y_coords.min(), y_coords.max()
+        # 將調整後的影像放置在A4畫布上
+        a4_canvas[y_offset:y_offset + new_height, x_offset:x_offset + new_width] = resized_image
 
-    # 裁切影像
-    cropped_images = [image[y_min:y_max, x_min:x_max] for image in images]
-    return cropped_images
+    return a4_canvas
 
 def process_images(folder_path, output_folder):
     """
-    主函數：讀取資料夾內所有影像，進行對齊並裁切。
-    :param folder_path: 包含原始影像的資料夾路徑
-    :param output_folder: 對齊和裁切後的影像輸出資料夾
+    主函數：處理所有影像並確保輸出為A4大小。
     """
-    # 讀取影像檔案
-    image_files = sorted([f for f in os.listdir(folder_path) if f.endswith(('.png', '.jpg', '.jpeg'))])
-    if not image_files:
-        raise ValueError("資料夾中未找到影像檔案。")
-    
-    # 確保輸出資料夾存在
+    # 建立輸出資料夾
     os.makedirs(output_folder, exist_ok=True)
-    
-    # 讀取參考影像
-    reference_image = cv2.imread(os.path.join(folder_path, image_files[0]))
-    aligned_images = [reference_image]  # 將參考影像加入列表
 
-    # 對齊其他影像
-    for image_file in image_files[1:]:
-        target_image = cv2.imread(os.path.join(folder_path, image_file))
+    # 讀取所有影像檔案
+    image_files = sorted([f for f in os.listdir(folder_path) 
+                         if f.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp'))])
+    
+    if not image_files:
+        raise ValueError("資料夾中未找到影像檔案")
+
+    # 讀取並處理參考影像
+    reference_path = os.path.join(folder_path, image_files[0])
+    reference_image = cv2.imread(reference_path)
+    if reference_image is None:
+        raise ValueError(f"無法讀取參考影像: {reference_path}")
+
+    # 確保參考影像為A4大小
+    reference_image = ensure_a4_size(reference_image)
+    
+    # 儲存處理後的參考影像
+    output_path = os.path.join(output_folder, f"aligned_a4_1.png")
+    cv2.imwrite(output_path, reference_image)
+    print(f"已儲存參考影像: {output_path}")
+
+    # 處理其餘影像
+    for i, image_file in enumerate(image_files[1:], 2):
+        target_path = os.path.join(folder_path, image_file)
+        target_image = cv2.imread(target_path)
+        
+        if target_image is None:
+            print(f"警告：無法讀取影像 {target_path}，跳過處理")
+            continue
+
+        # 確保目標影像為A4大小
+        target_image = ensure_a4_size(target_image)
+        
+        # 對齊影像
         aligned_image = align_images_ecc(reference_image, target_image)
-        aligned_images.append(aligned_image)
-    
-    # 裁切所有影像到共同區域
-    cropped_images = crop_to_common_area(aligned_images)
+        
+        # 再次確保輸出為A4大小
+        final_image = ensure_a4_size(aligned_image)
+        
+        # 儲存結果
+        output_path = os.path.join(output_folder, f"aligned_a4_{i}.png")
+        cv2.imwrite(output_path, final_image)
+        print(f"已儲存對齊影像: {output_path}")
 
-    # 保存裁切後的影像
-    for i, cropped_image in enumerate(cropped_images):
-        output_path = os.path.join(output_folder, f"aligned_cropped_{i+1}.png")
-        cv2.imwrite(output_path, cropped_image)
-        print(f"保存對齊並裁切的影像: {output_path}")
+if __name__ == "__main__":
+    input_folder = r"E:\Shitephen\Output log for FU hinoki from ARATA\FU hinoki 1st take (1-565)\jpge files\20241221_083815_3f\postprocess"
+    output_folder = r"E:\Shitephen\Output log for FU hinoki from ARATA\FU hinoki 1st take (1-565)\jpge files\20241221_083815_3f\postprocess\aligned_cropped_images"
+    process_images(input_folder, output_folder)
+    #請改成自己想要的路徑
 
-# 使用範例
-input_folder = r"E:\Shitephen\Output log for FU hinoki from ARATA\FU hinoki 1st take (1-565)\jpge files\20241116_052823_FU general\postprocess"  # 修改為你的資料夾路徑
-output_folder = r"E:\Shitephen\Output log for FU hinoki from ARATA\FU hinoki 1st take (1-565)\jpge files\20241116_052823_FU general\postprocess\aligned_cropped_images"  # 輸出資料夾名稱
-# 如果要直接輸出在根目錄 直接用 "aligned_cropped_images"
-
-process_images(input_folder, output_folder)
