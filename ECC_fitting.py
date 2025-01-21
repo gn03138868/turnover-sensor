@@ -2,7 +2,7 @@
 # 目前最好
 # 加上了區域連通性分析
 # 篩噪點在計算生長和分解量之後
-
+# 使平移+旋轉+切變+縮放 試圖對準各種形狀在不同情況下可能產生的位移
 
 import cv2
 import os
@@ -10,8 +10,8 @@ import numpy as np
 import pandas as pd
 
 # 資料夾路徑
-input_folder = r"E:\Shitephen\Output log for FU hinoki from ARATA\FU hinoki 1st take (1-565)\jpge files\20241116_052823_FU general\postprocess\aligned_cropped_images"
-output_csv = r"E:\Shitephen\Output log for FU hinoki from ARATA\FU hinoki 1st take (1-565)\jpge files\20241116_052823_FU general\postprocess\results_ECC_CCA.csv"
+input_folder = r"E:\Shitephen\Output log for FU hinoki from ARATA\FU hinoki 1st take (1-565)\jpge files\20241221_083815_3f\postprocess\aligned_cropped_images"
+output_csv = r"E:\Shitephen\Output log for FU hinoki from ARATA\FU hinoki 1st take (1-565)\jpge files\20241221_083815_3f\postprocess\results_ECC_CCA.csv"
 output_visual_folder = os.path.join(input_folder, "visual_results_ECC_CCA")
 
 os.makedirs(output_visual_folder, exist_ok=True)  # 確保輸出資料夾存在
@@ -40,8 +40,11 @@ for i in range(len(image_files) - 1):
 
     warp_matrix = np.eye(2, 3, dtype=np.float32)
     criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 5000, 1e-10)
+
     try:
-        cc, warp_matrix = cv2.findTransformECC(binary1, binary2, warp_matrix, cv2.MOTION_AFFINE, criteria)
+        # 添加 inputMask 和 gaussFiltSize
+        gaussFiltSize = 5  # 調整高斯濾波的大小（根據需要設定）
+        cc, warp_matrix = cv2.findTransformECC(binary1, binary2, warp_matrix, cv2.MOTION_AFFINE, criteria, None, gaussFiltSize)
         binary2_aligned = cv2.warpAffine(binary2, warp_matrix, (binary1.shape[1], binary1.shape[0]), flags=cv2.INTER_LINEAR)
     except cv2.error as e:
         print(f"Warning: Image alignment failed for {image_files[i]} and {image_files[i+1]} due to {e}")
