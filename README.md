@@ -1,11 +1,11 @@
-## Turnover Sensor (ver 0.33 stable)
+### Turnover Sensor (ver 0.33 stable)
 
 京都大学森林利用学研究室、ARATAミーティング、シテフェン ワン  
 京都大學森林利用學研究室，ARATA會議，屎地氛 王  
 Forest Utilisation lab at Kyoto University, ARATA meeting, & Shitephen Wang  
   
   
-#概要/概要/Overview  
+##概要/概要/Overview  
 Turnover Sensorは、根画像中の成長および分解を解析するためのPythonベースの小ちゃいツールです。このツールは、画像の形状を揃えるために平行移動、回転、せん断、スケーリングを組み合わせた高度な整列手法を提供します（ARATA、ImageJ、Photoshop、またはGIMPのバイナリ画像から…）。また、整列が失敗した場合には簡易的な整列モードに切り替えるフォールバック機能を備えています。さらに、成長および分解計算後に領域接続性の解析とノイズフィルタリングを行います。  
   
 Turnover Sensor 是一款基於 Python 的小工具，用於分析影像中的根生長與分解。本工具採用平移、旋轉、剪切及縮放的進階對齊技術，幫助對齊影像中的形狀，並在對齊失敗時切換至簡化模式作為備用方案（可分析來自ARATA、ImageJ、Photoshop或GIMP的黑白圖像...）。此外，工具還提供區域連接分析及在生長和分解計算後的雜訊過濾功能。  
@@ -13,7 +13,7 @@ Turnover Sensor 是一款基於 Python 的小工具，用於分析影像中的�
 The Turnover Sensor is a Python-based little tool designed for analysing root growth and decomposition in images (from binary images of ARATA, ImageJ, Photoshop, or GIMP... ...). This tool employs advanced alignment techniques that combine translation, rotation, shear, and scaling to align shapes within images. If alignment fails, the system automatically switches to a simplified mode as a fallback. Additionally, it includes functionality for analysing region connectivity and filtering noise after growth and decomposition calculations.  
   
   
-#特徴/特徴/Features  
+##特徴/特徴/Features  
 三位一体解析：画像整列、成長計算、分解評価を統合。  
 高度な整列機能：アフィン変換を用いて正確な画像整列を実現。失敗時は簡易モードに自動切り替え。  
 領域接続性解析：最小面積の閾値設定により、接続された領域を特定・処理。  
@@ -33,7 +33,7 @@ Noise Filtering: Enhances data accuracy by filtering noise after growth and deco
 A4 Standardisation: Resizes all images to A4 dimensions (600 DPI) and applies padding as needed.  
   
   
-#必要なソフトウェア/必要軟體/Software Requirements  
+##必要なソフトウェア/必要軟體/Software Requirements  
 
 1.Pythonバージョン/版本/version  
 Python 3.7.6 以上  
@@ -49,7 +49,7 @@ tkinter（Python標準インストールに含まれます）
 GUIサポート：Tkinterが正しくインストールされている必要があります（ほとんどのPython環境でデフォルトで含まれます）。  
   
   
-#インストール方法/安裝方法/Installation Instructions  
+##インストール方法/安裝方法/Installation Instructions  
 (もしすでにARATAの環境が整っている場合は、ARATA環境のルートディレクトリに直接配置してお願いいたします。)
 (如果您已經有ARATA的環境，直接放在ARATA環境的目錄就可以。)  
 ( If you already have the ARATA environment set up, simply place it in the directory of the ARATA environment.)  
@@ -76,7 +76,7 @@ bash
 python -m pip show opencv-python numpy pandas  
   
   
-#使用方法/使用方法/Usage Instructions  
+##使用方法/使用方法/Usage Instructions  
 1.このリポジトリをクローンまたはダウンロードします。  
 1.將此專案下載或複製至平常執行的資料夾中。  
 1.Clone or download this repository to your local system.  
@@ -98,7 +98,7 @@ python turnover_sensor.py
 4.Follow the GUI instructions to select input and output folders.  
   
   
-#出力ファイル/輸出檔案/Output Files  
+##出力ファイル/輸出檔案/Output Files  
 整列画像：A4サイズに標準化されたPNGファイルとして保存されます。  
 解析結果：ECCフィッティング解析が有効化されている場合、結果はCSV形式で保存されます。  
 可視化：処理済みの可視化結果は指定した出力フォルダに保存されます。  
@@ -112,11 +112,11 @@ Analysis Results: If ECC fitting analysis is enabled, results will be saved in C
 Visualisations: Processed visualisation outputs will be saved in the specified output folder.  
   
   
-#サポート/支援/Support  
+##サポート/支援/Support  
 ご質問やバグの報告、機能に関するリクエストがございましたら、どうぞお気軽にプロジェクトのメンテナまでご連絡いただけますようお願い申し上げます。  
 如有疑問、錯誤回報或功能建議，請聯繫維護人員，感謝您，如果他還活著的話。  
 If you have any questions, bug reports, or feature requests, please feel free to contact the maintainer if he is still alive in the world.  
   
-#メンテナ/維護人員/Maintainer：  
+##メンテナ/維護人員/Maintainer：  
 シティフン ワン/屎地氛/Shitephen Wang  
 Eメール/電子信箱/Email：gn03138868@gmail.com  
