@@ -1,8 +1,8 @@
 ## Turnover Sensor (ver 0.33 stable)
 
-京都大学森林利用学研究室、ARATAミーティング、シテフェン ワン
-京都大學森林利用學研究室，ARATA會議，屎地氛 王
-Forest Utilisation lab at Kyoto University, ARATA meeting, & Shitephen Wang
+京都大学森林利用学研究室、ARATAミーティング、シテフェン ワン  
+京都大學森林利用學研究室，ARATA會議，屎地氛 王  
+Forest Utilisation lab at Kyoto University, ARATA meeting, & Shitephen Wang  
 
 
 #概要/概要/Overview
