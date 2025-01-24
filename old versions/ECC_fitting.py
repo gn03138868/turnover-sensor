@@ -1,8 +1,10 @@
+# ECC_fitting.py
 # ECC (Enhanced Correlation Coefficient) fitting
 # 目前最好
 # 加上了區域連通性分析
 # 篩噪點在計算生長和分解量之後
-# 使平移+旋轉+切變+縮放 試圖對準各種形狀在不同情況下可能產生的位移
+# 使平移+旋轉+切變+縮放 試圖對準各種形狀的根
+# 如果對齊失敗，會用簡單的平移+旋轉
 
 import cv2
 import os
@@ -10,8 +12,8 @@ import numpy as np
 import pandas as pd
 
 # 資料夾路徑
-input_folder = r"E:\Shitephen\Output log for FU hinoki from ARATA\FU hinoki 1st take (1-565)\jpge files\20241221_083815_3f\postprocess\aligned_cropped_images"
-output_csv = r"E:\Shitephen\Output log for FU hinoki from ARATA\FU hinoki 1st take (1-565)\jpge files\20241221_083815_3f\postprocess\results_ECC_CCA.csv"
+input_folder = r"E:\Shitephen\Output log for FU hinoki from ARATA\FU hinoki 1st take (1-565)\jpge files\20241116_052823_1b\postprocess\postprocess_test\aligned_images"
+output_csv = r"E:\Shitephen\Output log for FU hinoki from ARATA\FU hinoki 1st take (1-565)\jpge files\20241116_052823_1b\postprocess\postprocess_test\results_ECC_CCA.csv"
 output_visual_folder = os.path.join(input_folder, "visual_results_ECC_CCA")
 
 os.makedirs(output_visual_folder, exist_ok=True)  # 確保輸出資料夾存在
@@ -42,13 +44,27 @@ for i in range(len(image_files) - 1):
     criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 5000, 1e-10)
 
     try:
-        # 添加 inputMask 和 gaussFiltSize
-        gaussFiltSize = 5  # 調整高斯濾波的大小（根據需要設定）
-        cc, warp_matrix = cv2.findTransformECC(binary1, binary2, warp_matrix, cv2.MOTION_AFFINE, criteria, None, gaussFiltSize)
+        # ECC 對齊
+        cc, warp_matrix = cv2.findTransformECC(
+            binary1, 
+            binary2, 
+            warp_matrix, 
+            cv2.MOTION_AFFINE, 
+            criteria, 
+            None, 
+            5  # gaussFiltSize
+        )
         binary2_aligned = cv2.warpAffine(binary2, warp_matrix, (binary1.shape[1], binary1.shape[0]), flags=cv2.INTER_LINEAR)
     except cv2.error as e:
-        print(f"Warning: Image alignment failed for {image_files[i]} and {image_files[i+1]} due to {e}")
-        continue
+        print(f"ECC alignment failed for {image_files[i]} and {image_files[i+1]}, fallback to simple translation and rotation.")
+
+        # 簡單平移和旋轉對齊
+        warp_matrix = np.array([[1, 0, 0], [0, 1, 0]], dtype=np.float32)  # 初始化平移矩陣
+        center = (binary1.shape[1] // 2, binary1.shape[0] // 2)  # 中心點
+        rotation_matrix = cv2.getRotationMatrix2D(center, angle=0, scale=1)  # 旋轉矩陣（角度可調整）
+
+        # 應用平移和旋轉
+        binary2_aligned = cv2.warpAffine(binary2, rotation_matrix, (binary1.shape[1], binary1.shape[0]), flags=cv2.INTER_LINEAR)
 
     # --- 2. 計算面積 ---
     area1 = np.sum(binary1 == 255)
