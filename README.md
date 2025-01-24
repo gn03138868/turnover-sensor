@@ -6,11 +6,11 @@ Forest Utilisation lab at Kyoto University, ARATA meeting, & Shitephen Wang
   
   
 #概要/概要/Overview  
-Turnover Sensorは、画像中の成長および分解を解析するためのPythonベースの小ちゃいツールです。このツールは、画像の形状を揃えるために平行移動、回転、せん断、スケーリングを組み合わせた高度な整列手法を提供します（ARATA、ImageJ、Photoshop、またはGIMPのバイナリ画像から…）。また、整列が失敗した場合には簡易的な整列モードに切り替えるフォールバック機能を備えています。さらに、成長および分解計算後に領域接続性の解析とノイズフィルタリングを行います。  
+Turnover Sensorは、根画像中の成長および分解を解析するためのPythonベースの小ちゃいツールです。このツールは、画像の形状を揃えるために平行移動、回転、せん断、スケーリングを組み合わせた高度な整列手法を提供します（ARATA、ImageJ、Photoshop、またはGIMPのバイナリ画像から…）。また、整列が失敗した場合には簡易的な整列モードに切り替えるフォールバック機能を備えています。さらに、成長および分解計算後に領域接続性の解析とノイズフィルタリングを行います。  
   
-Turnover Sensor 是一款基於 Python 的小工具，用於分析影像中的生長與分解。本工具採用平移、旋轉、剪切及縮放的進階對齊技術，幫助對齊影像中的形狀，並在對齊失敗時切換至簡化模式作為備用方案（可分析來自ARATA、ImageJ、Photoshop或GIMP的黑白圖像...）。此外，工具還提供區域連接分析及在生長和分解計算後的雜訊過濾功能。  
+Turnover Sensor 是一款基於 Python 的小工具，用於分析影像中的根生長與分解。本工具採用平移、旋轉、剪切及縮放的進階對齊技術，幫助對齊影像中的形狀，並在對齊失敗時切換至簡化模式作為備用方案（可分析來自ARATA、ImageJ、Photoshop或GIMP的黑白圖像...）。此外，工具還提供區域連接分析及在生長和分解計算後的雜訊過濾功能。  
   
-The Turnover Sensor is a Python-based little tool designed for analysing growth and decomposition in images (from binary images of ARATA, ImageJ, Photoshop, or GIMP... ...). This tool employs advanced alignment techniques that combine translation, rotation, shear, and scaling to align shapes within images. If alignment fails, the system automatically switches to a simplified mode as a fallback. Additionally, it includes functionality for analysing region connectivity and filtering noise after growth and decomposition calculations.  
+The Turnover Sensor is a Python-based little tool designed for analysing root growth and decomposition in images (from binary images of ARATA, ImageJ, Photoshop, or GIMP... ...). This tool employs advanced alignment techniques that combine translation, rotation, shear, and scaling to align shapes within images. If alignment fails, the system automatically switches to a simplified mode as a fallback. Additionally, it includes functionality for analysing region connectivity and filtering noise after growth and decomposition calculations.  
   
   
 #特徴/特徴/Features  
