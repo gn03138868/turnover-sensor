@@ -50,8 +50,8 @@ GUIサポート：Tkinterが正しくインストールされている必要が�
   
   
 ##インストール方法/安裝方法/Installation Instructions  
-(もしすでにARATAの環境が整っている場合は、ARATA環境のルートディレクトリに直接配置してお願いいたします。)
-(如果您已經有ARATA的環境，直接放在ARATA環境的目錄就可以。)  
+(もしすでにARATAの環境が整っている場合は、ARATA環境のルートディレクトリに直接配置してお願いいたします。)  
+(如果您已經有ARATA的環境，直接放在ARATA環境的目錄就可以。)   
 ( If you already have the ARATA environment set up, simply place it in the directory of the ARATA environment.)  
   
 1.Pythonのインストール/安裝python/Install python  
@@ -93,9 +93,9 @@ bash
 python turnover_sensor.py  
   
   
-4.GUIの指示に従って、入力および出力フォルダを選択してください。  
-4.根據 GUI 指引，選擇輸入與輸出資料夾。  
-4.Follow the GUI instructions to select input and output folders.  
+4.GUIの指示に従って、入力フォルダを選択してください。  
+4.根據 GUI 指引，選擇輸入資料夾。  
+4.Follow the GUI instructions to select input folders.  
   
   
 ##出力ファイル/輸出檔案/Output Files  
