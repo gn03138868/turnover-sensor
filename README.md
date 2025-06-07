@@ -1,6 +1,6 @@
 ### Turnover Sensor (ver 0.44 stable)
-新版本的安裝方法製作中
-readme.mdの新バージョンを作成中です
+新版本的安裝方法製作中/
+readme.mdの新バージョンを作成中です/
 New version of readme.md is under building (0.44 added OpticalFlow, Homography, bUnwarpJ, and Auto -Battle Royale. The bUnwarpJ need to install Fiji and pyimageJ. Other methods are the same as usual)
 
 京都大学森林利用学研究室、ARATAミーティング、シティフン ワン  
