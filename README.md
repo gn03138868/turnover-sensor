@@ -1,4 +1,4 @@
-### Turnover Sensor (ver 0.33 stable)
+### Turnover Sensor (ver 0.44 stable)
 
 京都大学森林利用学研究室、ARATAミーティング、シティフン ワン  
 京都大學森林利用學研究室，ARATA會議，屎地氛 王  
