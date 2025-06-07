@@ -938,7 +938,7 @@ class Application(tk.Tk):
         tk.Label(method_info_frame, text=methods_text, bg="#f7f7f7",
                 justify=tk.LEFT, font=("Arial", 9)).pack(anchor="w")
 
-        # 操作按钮
+        # 操作按鈕
         btn_frame = tk.Frame(self, bg="#f7f7f7")
         btn_frame.pack(pady=15)
         ttk.Button(btn_frame, text="📁 Select Folder フォルダを選択",
@@ -950,7 +950,7 @@ class Application(tk.Tk):
         ttk.Button(btn_frame, text="🎨 HSV Post-processing HSV後処理",
                   command=self.start_hsv_thread).pack(side=tk.LEFT, padx=5)
 
-        # 状态显示
+        # 狀態顯示
         tk.Label(self, textvariable=self.status_var, font=("Arial",10),
                 fg="#444", bg="#f7f7f7").pack(pady=5)
         ttk.Progressbar(self, variable=self.progress_var, maximum=100).pack(
@@ -958,7 +958,7 @@ class Application(tk.Tk):
         tk.Label(self, textvariable=self.elapsed_time_var, font=("Arial",12),
                 fg="#555", bg="#f7f7f7").pack(pady=10)
 
-        # 版权信息
+        # 版權信息
         tk.Label(self,
                 text="Developed by the Forest Utilisation Lab in collaboration with ARATA meeting members. Copyright © 2025.",
                 bd=1, relief=tk.SUNKEN, anchor=tk.W).pack(side=tk.BOTTOM, fill=tk.X)
