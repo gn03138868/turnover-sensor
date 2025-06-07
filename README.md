@@ -93,7 +93,7 @@ python -m pip show opencv-python numpy pandas
 3.Run the script with the following command:  
   
 bash  
-python turnover_sensor.py  
+python turnover_sensor_044.py  
   
   
 4.GUIの指示に従って、入力フォルダを選択してください。  
