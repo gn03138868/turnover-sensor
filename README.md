@@ -94,7 +94,10 @@ python -m pip show opencv-python numpy pandas
   
 bash  
 python turnover_sensor_044.py  
-  
+
+3.1. If ModuleNotFoundError: No module named 'imagej' appeared
+commend below
+pip install pyimagej --user
   
 4.GUIの指示に従って、入力フォルダを選択してください。  
 4.根據 GUI 指引，選擇輸入資料夾。  
