@@ -876,7 +876,7 @@ class Application(tk.Tk):
 
     def create_widgets(self):
         # 標題
-        tk.Label(self, text="Turnover Sensor v0.43", font=("Helvetica",18,"bold"),
+        tk.Label(self, text="Turnover Sensor v0.44", font=("Helvetica",18,"bold"),
                  fg="#333", bg="#f7f7f7").pack(pady=10)
 
         # 新功能說明
