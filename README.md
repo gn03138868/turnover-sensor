@@ -68,7 +68,7 @@ https://www.python.org/downloads/
 使用以下指令透過 pip 安裝函式庫：  
   
 bash  
-pip install opencv-python numpy pandas  
+pip install opencv-python numpy pandas skimage 
   
   
 3.インストール確認/安裝確認/Verify Installation  
@@ -76,7 +76,7 @@ pip install opencv-python numpy pandas
 確保函式庫已正確安裝：  
   
 bash  
-python -m pip show opencv-python numpy pandas  
+python -m pip show opencv-python numpy pandas skimage 
   
   
 ##使用方法/使用方法/Usage Instructions  
