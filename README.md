@@ -68,8 +68,10 @@ https://www.python.org/downloads/
 使用以下指令透過 pip 安裝函式庫：  
   
 bash  
-pip install opencv-python numpy pandas skimage 
-  
+pip install opencv-python numpy pandas 
+
+bash  
+python -m pip install -U scikit-image
   
 3.インストール確認/安裝確認/Verify Installation  
 ライブラリが正しくインストールされているか確認します：  
@@ -77,7 +79,9 @@ pip install opencv-python numpy pandas skimage
   
 bash  
 python -m pip show opencv-python numpy pandas skimage 
-  
+
+bash  
+python -m pip install -U scikit-image  
   
 ##使用方法/使用方法/Usage Instructions  
 1.このリポジトリをクローンまたはダウンロードします。  
