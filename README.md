@@ -68,10 +68,9 @@ https://www.python.org/downloads/
 使用以下指令透過 pip 安裝函式庫：  
   
 bash  
-pip install opencv-python numpy pandas 
-
-bash  
-python -m pip install -U scikit-image
+python -m pip show opencv-python numpy pandas skimage 
+python -m pip install -U scikit-image  
+conda install -c conda-forge pyimagej openjdk=11
   
 3.インストール確認/安裝確認/Verify Installation  
 ライブラリが正しくインストールされているか確認します：  
@@ -79,9 +78,8 @@ python -m pip install -U scikit-image
   
 bash  
 python -m pip show opencv-python numpy pandas skimage 
-
-bash  
 python -m pip install -U scikit-image  
+conda install -c conda-forge pyimagej openjdk=11
   
 ##使用方法/使用方法/Usage Instructions  
 1.このリポジトリをクローンまたはダウンロードします。  
